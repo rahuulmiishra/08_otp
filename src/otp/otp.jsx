@@ -81,7 +81,23 @@ function OTP({ count, onOTPComplete }) {
 
     if (inputRefs.current[index + 1]) {
       if (oldOtps) {
-        const trimedArray = otps.slice(index);
+        //         Guy’s one correction to yesterday code. in function moveFocusToRight,
+
+        // We had used slice to trim array, but it will not work. because we are trimming our original array, and if in original array empty string it at index 3, after trmiing it might come at 1, or 2.
+
+        // To fix this we can use original array, and we will simply fill the values before index with any random value other than empty string, so that we always get matach in right direction.
+
+        // Here is how we will do it:
+        // previous
+        //     const trimedArray = otps.slice(index);
+
+        // Now:
+        //   const tempArray = [...otps];
+        //   const trimedArray = tempArray.fill("*", 0, index);
+        // const trimedArray = otps.slice(index);
+
+        const tempArray = [...otps];
+        const trimedArray = tempArray.fill("*", 0, index);
         // find the index of empty box
         const emptyIndex = trimedArray.indexOf("");
         inputRefs.current[emptyIndex]?.focus();
